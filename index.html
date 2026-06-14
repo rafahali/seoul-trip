@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0c0d10">
+<title>Seoul, Boys — The Menu</title>
+<style>
+  :root{
+    --bg:#0c0d10; --card:#15171e; --card2:#1b1e27; --line:#2a2e3a;
+    --txt:#ecebe6; --mut:#9aa0ad; --soft:#c7cad3; --accent:#ff4d5e; --accent2:#46d6c6; --gold:#e8c479;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  header{padding:30px 20px 18px;background:
+    radial-gradient(120% 90% at 85% -10%, rgba(255,77,94,.24), transparent 55%),
+    radial-gradient(120% 90% at 0% 0%, rgba(70,214,198,.14), transparent 50%),
+    var(--bg);border-bottom:1px solid var(--line)}
+  .kicker{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent2);font-weight:700}
+  h1{margin:8px 0 8px;font-size:36px;line-height:.98;letter-spacing:-.025em;font-weight:800}
+  .sub{color:var(--mut);font-size:14px}
+  .sub b{color:var(--txt)}
+
+  .bars{position:sticky;top:0;z-index:30;background:rgba(12,13,16,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  nav{display:flex;gap:6px;padding:10px 12px 7px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  nav a{flex:0 0 auto;border:1px solid var(--line);color:var(--soft);font-size:13px;font-weight:700;
+    letter-spacing:.04em;padding:7px 15px;border-radius:999px;text-transform:uppercase}
+  nav a.plan{border-color:var(--accent);color:#ffd2d6}
+  .dayfilter{display:flex;align-items:center;gap:6px;padding:1px 12px 9px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .dayfilter .dl{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut);font-weight:800;flex:0 0 auto}
+  .dayfilter button{flex:0 0 auto;background:transparent;border:1px solid var(--line);color:var(--soft);
+    font-size:12.5px;font-weight:700;padding:5px 13px;border-radius:999px;font-family:inherit}
+  .dayfilter button.active{background:var(--accent2);border-color:var(--accent2);color:#06201d}
+
+  main{padding:6px 14px 30px;max-width:700px;margin:0 auto}
+  section{scroll-margin-top:104px;padding-top:16px}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin:12px 4px 4px}
+  .sec-head .n{font-size:12px;font-weight:800;color:var(--accent);letter-spacing:.1em}
+  .sec-head h2{font-size:25px;font-weight:800;letter-spacing:-.02em;margin:0}
+  .sec-sub{color:var(--mut);font-size:13.5px;margin:0 4px 14px;max-width:92%}
+  .filter-note{display:none;font-size:12.5px;color:var(--accent2);font-weight:700;margin:0 4px 12px}
+  body.filtering .filter-note{display:block}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px 16px;margin:0 0 11px}
+  .card.star{border-color:rgba(232,196,121,.42);background:linear-gradient(180deg,rgba(232,196,121,.05),var(--card))}
+  .card.hide{display:none}
+  .more{display:none}
+  section.open .more{display:block}
+  body.filtering .more{display:block}
+  .rank{font-size:12px;font-weight:800;color:var(--mut);margin-right:3px}
+  .card.star .rank{color:var(--gold)}
+  .card-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .card h3{margin:0;font-size:17px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+  .price{color:var(--gold);font-size:13px;font-weight:700;white-space:nowrap;flex:0 0 auto}
+  .dm{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#1b1205;
+    background:var(--gold);padding:2px 8px;border-radius:5px;margin:9px 0 0;text-transform:uppercase}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0 0}
+  .tag{font-size:11px;color:var(--mut);background:var(--card2);border:1px solid var(--line);padding:3px 9px;border-radius:999px}
+  .tag.vibe{color:#ffd2d6;border-color:rgba(255,77,94,.4);background:rgba(255,77,94,.1)}
+  .tag.wi{color:#bff0ea;border-color:rgba(70,214,198,.35);background:rgba(70,214,198,.09)}
+  .tag.lock{color:#fff;background:rgba(255,77,94,.9);border-color:transparent;font-weight:700}
+  .tag.day{color:var(--gold);border-color:rgba(232,196,121,.35);background:rgba(232,196,121,.08)}
+  .card p{margin:10px 0 12px;font-size:14px;color:var(--soft)}
+  .links{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .btn{font-size:12.5px;font-weight:700;letter-spacing:.02em;padding:7px 13px;border-radius:9px;
+    border:1px solid var(--line);color:var(--txt);background:var(--card2)}
+  .btn.book{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.map{border-color:rgba(70,214,198,.4);color:#bff0ea}
+  .add{margin-left:auto;width:36px;height:36px;border-radius:50%;font-size:21px;line-height:1;font-weight:700;
+    border:1px solid var(--accent2);color:#bff0ea;background:rgba(70,214,198,.08);font-family:inherit;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;padding:0;flex:0 0 auto}
+  .add.on{background:var(--accent2);color:#06201d;border-color:var(--accent2)}
+  .sharebtn{margin-left:auto;background:var(--accent);border:1px solid var(--accent);color:#fff;font-weight:800;
+    font-size:13px;padding:8px 17px;border-radius:9px;font-family:inherit;cursor:pointer;align-self:center}
+  .owntoggle{display:block;width:100%;margin:4px 0 12px;background:transparent;border:1px dashed var(--line);
+    color:var(--soft);font-weight:700;font-size:13px;padding:11px;border-radius:11px;font-family:inherit;cursor:pointer}
+  .show-all{display:block;width:100%;margin:2px 0 10px;background:transparent;border:1px dashed var(--line);
+    color:var(--soft);font-weight:700;font-size:13px;padding:11px;border-radius:11px;font-family:inherit;cursor:pointer}
+  body.filtering .show-all{display:none}
+
+  .evform{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;margin:0 0 16px}
+  .evform input,.evform select{font-family:inherit;font-size:14px;background:var(--card2);border:1px solid var(--line);
+    color:var(--txt);border-radius:9px;padding:10px 11px;width:100%}
+  .evform .evrow{display:flex;gap:8px;margin:8px 0 0}
+  .evform .evrow select,.evform .evrow input{flex:1;min-width:0}
+  .evform button{flex:0 0 auto;background:var(--accent);border:1px solid var(--accent);color:#fff;font-weight:800;
+    border-radius:9px;padding:10px 20px;font-family:inherit;font-size:14px;cursor:pointer}
+  .empty{color:var(--mut);font-size:13.5px;background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:20px;text-align:center}
+  .empty b{color:var(--soft)}
+  .dayh{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:800;
+    margin:16px 2px 9px;border-bottom:1px solid var(--line);padding-bottom:6px}
+  .pentry{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 12px;margin:0 0 8px}
+  .pe-name{font-weight:700;font-size:14px}
+  .ig{font-size:11px;color:var(--gold);margin-left:7px;white-space:nowrap}
+  .warn{font-size:11px;color:#ffd2d6;background:rgba(255,77,94,.2);padding:2px 7px;border-radius:6px;margin-left:7px;white-space:nowrap}
+  .evnote{font-size:12.5px;color:var(--mut);margin-top:4px}
+  .pe-ctl{display:flex;gap:7px;align-items:center;margin-top:9px}
+  .pe-ctl input,.pe-ctl select{font-family:inherit;background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:6px 8px;font-size:12.5px}
+  .pe-time{width:96px}
+  .pe-day{flex:1;min-width:0}
+  .pe-rm{margin-left:auto;background:transparent;border:1px solid var(--line);color:var(--mut);border-radius:8px;padding:6px 11px;font-family:inherit;font-size:14px;cursor:pointer}
+
+  footer{border-top:1px solid var(--line);padding:22px 18px 60px;color:#5c6270;font-size:12px;max-width:700px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">The Menu · Five guys · Seoul</div>
+  <h1>Seoul, Boys.</h1>
+  <div class="sub">5 dudes · Apgujeong base · <b>Mon Jun 15 → Wed AM Jun 17</b><br>Ranked best-first. Filter by day, tap <b>+</b> to build your plan, then Share it. <b>★ = top three.</b> <b style="color:#ff8a93">Red tag = limited dates.</b></div>
+</header>
+
+<div class="bars">
+  <nav>
+    <a href="#plan" class="plan">Plan<span id="plancount"></span></a>
+    <a href="#eat">Eat</a>
+    <a href="#drink">Drink</a>
+    <a href="#do">Do</a>
+    <a href="#shop">Shop</a>
+    <a href="#wander">Wander</a>
+    <a href="#tips">Tips</a>
+  </nav>
+  <div class="dayfilter">
+    <span class="dl">Filter by day</span>
+    <button data-day="all" class="active">All</button>
+    <button data-day="mon">Mon</button>
+    <button data-day="tue">Tue</button>
+    <button data-day="wed">Wed AM</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- ===================== PLAN ===================== -->
+  <section id="plan">
+    <div class="sec-head"><span class="n">00</span><h2>Your Plan</h2><button id="shareBtn" class="sharebtn">Share</button></div>
+    <div id="planlist"></div>
+    <button id="ownToggle" class="owntoggle">+ Add your own plan</button>
+    <form id="evform" class="evform" autocomplete="off" hidden>
+      <input id="ev-title" placeholder="e.g. Dinner with Jay's cousin, flight to HCMC">
+      <div class="evrow">
+        <select id="ev-day">
+          <option value="mon">Mon Jun 15</option>
+          <option value="tue">Tue Jun 16</option>
+          <option value="wed">Wed AM Jun 17</option>
+          <option value="none">Unscheduled</option>
+        </select>
+        <input id="ev-time" type="time">
+        <button type="submit">Add</button>
+      </div>
+      <div class="evrow"><input id="ev-note" placeholder="Note, optional"></div>
+    </form>
+  </section>
+
+  <!-- ===================== EAT ===================== -->
+  <section id="eat">
+    <div class="sec-head"><span class="n">01</span><h2>Eat</h2></div>
+    <p class="sec-sub">Ranked. The stuff with a story: premium hanwoo, charcoal pork worth the cab, century-old soup shrines, a gimbap stall at the center of a national scandal.</p>
+    <p class="filter-note"></p>
+
+    <div class="card star" data-id="wootender" data-name="Woo Tender (KBBQ)" data-day="mon,tue" data-daytag="Mon/Tue">
+      <div class="card-head"><h3><span class="rank">1</span>Woo Tender</h3><span class="price">~$70–95</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">premium hanwoo</span><span class="tag">Apgujeong · 8 min walk</span><span class="tag">reserve</span></div>
+      <p>The night-one grill: 1++ hanwoo over charcoal, marbled like a magazine spread, with table-side staff doing the work so you just eat and talk. Order the tenderloin, the ribeye, and the cult hanwoo katsu-sando. Walkable from the hotel, and it fills up, so reserve.</p>
+      <div class="links"><a class="btn book" href="https://www.catchtable.net/shop/wootender">Reserve</a><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Wootender+Apgujeong+Seoul">Map</a><button class="add">+</button></div>
+    </div>
+
+    <div class="card star" data-id="mapo" data-name="Mapo Jeong Daepo (KBBQ)" data-day="mon,tue" data-daytag="Mon/Tue">
+      <div class="card-head"><h3><span class="rank">2</span>Mapo Jeong Daepo</h3><span class="price">~$18–22</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">old-school / absurd ROI</span><span class="tag">Mapo · 25–35 min</span><span class="tag wi">walk-in</span></div>
+      <p>No-frills charcoal pork in a smoky, loud, paper-on-the-table room that hits harder than places triple the bill. Get the galmaegisal (pork skirt) and the pork skin, grill it yourself, drink soju. The kind of meal you'll quote for years. Go early, it's walk-in.</p>
+      <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=마포정대포+서울">Map</a><a class="btn" href="https://www.instagram.com/jungdaepo_/">IG</a><button class="add">+</button></div>
+    </div>
+
+    <div class="card star" data-id="mingles" data-name="Mingles (3-star)" data-day="mon,tue" data-daytag="dinner, Mon/Tue">
+      <div class="card-head"><h3><span class="rank">3</span>Mingles</h3><span class="price">~$305</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">the best meal in Korea</span><span class="tag day">3-star · Mon/Tue</span><span class="tag">Cheongdam · 6 min taxi</span></div>
+      <p>Korea's only three-star, and the one chefs send you to: the "Mingling Pot" and the jang-trio dessert are worth the trip alone. Heads up, a party of 5 triggers a ~$100 deposit and it's near-certainly a waitlist play this late, so jump on it now.</p>
+      <div class="links"><a class="btn book" href="https://www.restaurant-mingles.com/reservation">Reserve</a><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Mingles+restaurant+Seoul">Map</a><button class="add">+</button></div>
+    </div>
+
+    <div class="more">
+      <div class="card" data-id="geumdwaeji" data-name="Geumdwaeji Sikdang (KBBQ)" data-day="mon,tue" data-daytag="Mon/Tue">
+        <div class="card-head"><h3><span class="rank">4</span>Geumdwaeji Sikdang</h3><span class="price">~$25–35</span></div>
+        <div class="tags"><span class="tag vibe">Michelin Bib</span><span class="tag">Sindang · 6 min on Line 3</span><span class="tag wi">waitlist app</span></div>
+        <p>Michelin-listed pork BBQ where the thick-cut samgyeopsal is grilled to order and the kimchi jjigae has its own fan club. A direct, no-transfer subway shot from Apgujeong into a cool gritty neighborhood. Put your name in the waitlist app on arrival and go wander Sindang.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=금돼지식당+서울">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="jungsik" data-name="Jungsik (2-star)" data-day="mon,tue" data-daytag="dinner, Mon/Tue">
+        <div class="card-head"><h3><span class="rank">5</span>Jungsik</h3><span class="price">~$240</span></div>
+        <div class="tags"><span class="tag day">Any night · 2-star</span><span class="tag">Cheongdam · 6 min taxi</span><span class="tag">reserve</span></div>
+        <p>Modern Korean from the same house as the 3-star in NYC, the least stuffy of the fine-dining tier and the only top spot open both your nights. The gimbap course and the hanwoo galbi are the signatures. If you want one memorable big meal without the fuss, this is it.</p>
+        <div class="links"><a class="btn book" href="https://www.catchtable.net/shop/jungsik">Reserve</a><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Jungsik+Seoul">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="eulji" data-name="Eulji Myeonok" data-day="mon,tue,wed" data-daytag="">
+        <div class="card-head"><h3><span class="rank">6</span>Eulji Myeonok</h3><span class="price">~$10</span></div>
+        <div class="tags"><span class="tag vibe">cult / austere</span><span class="tag">Nakwon-dong · 30 min</span><span class="tag wi">walk-in</span></div>
+        <p>Evicted by redevelopment in 2022, the family bought a building outright so it could never be pushed out again and reopened in 2024 to a line of Pyongyang-naengmyeon purists out the door. The cold buckwheat broth is almost shy on flavor on purpose, the benchmark every other bowl is judged against. Add the sliced beef. Use the Nakwon-dong address, half the web still lists the dead one.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=을지면옥+낙원동+Seoul">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="monyeo" data-name="Monyeo Gimbap (Gwangjang)" data-day="mon,tue,wed" data-daytag="">
+        <div class="card-head"><h3><span class="rank">7</span>Monyeo Gimbap · Gwangjang</h3><span class="price">~$3</span></div>
+        <div class="tags"><span class="tag vibe">famous + funny</span><span class="tag">Gwangjang · 30 min</span><span class="tag wi">walk-in</span></div>
+        <p>A mother-and-daughter stall that literally invented "mayak gimbap" (drug gimbap) after a blogger called the mustard-soy mini-rolls so addictive they should be illegal, and in 2024 the government actually made vendors stop using the word. Eaten elbow-to-elbow on a market bench, dipped in mustard-spiked soy. Fans include Tim Burton. Peak market theater.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Monyeo+Gimbap+Gwangjang+Market+Seoul">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="mosu" data-name="Mosu (2-star)" data-day="tue" data-daytag="Tue only">
+        <div class="card-head"><h3><span class="rank">8</span>Mosu</h3><span class="price">~$290</span></div>
+        <div class="tags"><span class="tag lock">Tue only</span><span class="tag">Hannam · 15–20 min</span><span class="tag">reserve</span></div>
+        <p>Two stars from the Culinary Class Wars chef Anh Sung-jae, a tight tasting that's pure technique and restraint. It's only open Tuesday during your stay, so if you want it, that's the night to build around. Reserve on CatchTable, waitlist if it's full.</p>
+        <div class="links"><a class="btn book" href="https://www.catchtable.net/shop/mosuseoul">Reserve</a><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Mosu+Seoul+Hannam">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="evett" data-name="Evett (2-star)" data-day="tue" data-daytag="Tue only">
+        <div class="card-head"><h3><span class="rank">9</span>Evett</h3><span class="price">~$200</span></div>
+        <div class="tags"><span class="tag lock">Tue only</span><span class="tag">Gangnam · 15 min walk</span><span class="tag">email for 5</span></div>
+        <p>Two stars and the closest fine dining to the hotel, known for its Meju Donut and serious house fermentation. Also Tuesday-only this window, and a party of 5 books by email rather than the app, so send the request now: reservation@restaurantevett.com.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Evett+restaurant+Seoul">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="hadongkwan" data-name="Hadongkwan (gomtang)" data-day="mon,tue" data-daytag="lunch, Mon/Tue">
+        <div class="card-head"><h3><span class="rank">10</span>Hadongkwan</h3><span class="price">~$12</span></div>
+        <div class="tags"><span class="tag lock">Lunch only · sells out</span><span class="tag">Myeongdong · 30 min</span><span class="tag wi">walk-in</span></div>
+        <p>Open since 1939, you pay before you eat and the door shuts the second the day's beef runs out, usually by mid-afternoon. It's a high-turnover gomtang shrine with a lunchtime line of regulars ordering in house shorthand. The move: crack a raw egg into the broth and add rice. Go before 1 PM.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Hadongkwan+Myeongdong+Seoul">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="imun" data-name="Imun Seolnongtang" data-day="mon,tue,wed" data-daytag="">
+        <div class="card-head"><h3><span class="rank">11</span>Imun Seolnongtang</h3><span class="price">~$8</span></div>
+        <div class="tags"><span class="tag vibe">oldest in Korea</span><span class="tag">Jongno · 30 min</span><span class="tag wi">walk-in</span></div>
+        <p>Founded around 1904, the first restaurant ever licensed in the country, and 120 years later you still eat the milky ox-bone soup head-down at a worn table next to office workers. The bones boil 17 hours; you salt and scallion it yourself. This is eating inside Seoul's history.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Imun+Seolnongtang+Seoul">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="cheongjinok" data-name="Cheongjinok (haejangguk)" data-day="mon,tue,wed" data-daytag="">
+        <div class="card-head"><h3><span class="rank">12</span>Cheongjinok</h3><span class="price">~$7</span></div>
+        <div class="tags"><span class="tag vibe">hangover alley</span><span class="tag">Jongno · 30 min</span><span class="tag wi">walk-in</span></div>
+        <p>Founded 1937, third generation now, the anchor of a "haejangguk alley" where taxi drivers and morning-after salarymen have lined up for decades. Bones simmer 24 hours into a hearty brown bowl, the original hangover cure. Order the seonji haejangguk. Opens at 6 AM if you're truly rough.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Cheongjinok+Jongno+Seoul">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="saebyukjip" data-name="Saebyukjip (24h late-night)" data-day="mon,tue,wed" data-daytag="">
+        <div class="card-head"><h3><span class="rank">13</span>Saebyukjip</h3><span class="price">~$12–15</span></div>
+        <div class="tags"><span class="tag vibe">24 hours</span><span class="tag">Cheongdam · 5 min taxi</span><span class="tag wi">walk-in</span></div>
+        <p>"House of Dawn," open round the clock, where you land at 3 AM for yukhoe bibimbap and a bubbling pot of hangover soup. Five minutes from base, no plan required.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=새벽집+청담+서울">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="nudake" data-name="Nudake · PEAK croissant" data-day="mon,tue,wed" data-daytag="">
+        <div class="card-head"><h3><span class="rank">14</span>Nudake · the PEAK croissant</h3><span class="price">~$8–12</span></div>
+        <div class="tags"><span class="tag vibe">edible sculpture</span><span class="tag">Sinsa · 12 min walk</span><span class="tag wi">walk-in</span></div>
+        <p>Gentle Monster's dessert lab in the basement of their flagship, where the signature PEAK is a matcha-cream croissant built to look like a black mountain you crack open. Looks unhinged, tastes great, and it's the most photogenic 15 minutes in your own neighborhood. Sells out, go earlyish.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Nudake+Haus+Dosan+Seoul">Map</a><a class="btn" href="https://www.nudake.com/">Site</a><button class="add">+</button></div>
+      </div>
+    </div>
+    <button class="show-all" data-label="Show all 14 spots →">Show all 14 spots →</button>
+  </section>
+
+  <!-- ===================== DRINK ===================== -->
+  <section id="drink">
+    <div class="sec-head"><span class="n">02</span><h2>Drink</h2></div>
+    <p class="sec-sub">Ranked. Orange-tent soju with off-duty office workers, a bar you reach by climbing five dark floors, another you order from on a 1970s payphone.</p>
+    <p class="filter-note"></p>
+
+    <div class="card star" data-id="jongno" data-name="Jongno 3-ga Tent Alley" data-day="mon,tue" data-daytag="nights">
+      <div class="card-head"><h3><span class="rank">1</span>Jongno 3-ga Tent Alley</h3><span class="price">~$10–15</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">pojangmacha</span><span class="tag">Jongno · 25 min, Line 3</span><span class="tag wi">walk-in, cash</span></div>
+      <p>At dusk the orange-tarp tents bloom along the pavement, plastic stools spilling into the lane, loosened-tie office workers hunched over bubbling odeng broth and sweating soju bottles, the whole strip glowing amber. Order odeng and a green bottle, sit shoulder-to-shoulder with locals, watch the after-work churn. Densest toward Exits 5–6.</p>
+      <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Jongno+3-ga+Pojangmacha+Street+Seoul">Map</a><button class="add">+</button></div>
+    </div>
+
+    <div class="card star" data-id="nogari" data-name="Euljiro Nogari Alley · Manseon Hof" data-day="mon,tue" data-daytag="nights">
+      <div class="card-head"><h3><span class="rank">2</span>Euljiro Nogari Alley · Manseon Hof</h3><span class="price">~$10–15</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">Korea's Oktoberfest</span><span class="tag">Euljiro · 25 min, Line 3</span><span class="tag wi">walk-in</span></div>
+      <p>Lanes so tight two people barely pass, wall-to-wall red stools and wobbly tables, icy mugs clinking under string lights, the whole alley smelling of grilled dried pollack. The anchor since 1980: tear the nogari into spicy mayo, chase with ice-cold draft, surrounded by welders and art-school kids alike. Your cheapest, grittiest, best centerpiece night.</p>
+      <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Manseon+Hof+Euljiro+Seoul">Map</a><button class="add">+</button></div>
+    </div>
+
+    <div class="card star" data-id="jeanfrigo" data-name="Jean Frigo (payphone bar)" data-day="mon,tue" data-daytag="nights">
+      <div class="card-head"><h3><span class="rank">3</span>Jean Frigo</h3><span class="price">~$12–18</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">order via payphone</span><span class="tag">Dongdaemun · 25–30 min</span><span class="tag">IG DM</span></div>
+      <p>Walk into an unassuming fruit stall, open a refrigerator door into a hidden bar, then place your order by dropping a coin in a vintage payphone and dialing 102 to reach the bartender. The mechanic itself is the entire bit, which is exactly your kind of stupid-genius. Small room, DM ahead for five.</p>
+      <div class="links"><a class="btn" href="https://www.instagram.com/jeanfrigo_official/">DM to book</a><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Jean+Frigo+Seoul">Map</a><button class="add">+</button></div>
+    </div>
+
+    <div class="more">
+      <div class="card" data-id="seendosi" data-name="Seendosi (hidden bar climb)" data-day="mon,tue" data-daytag="nights">
+        <div class="card-head"><h3><span class="rank">4</span>Seendosi</h3><span class="price">~$5–7</span></div>
+        <div class="tags"><span class="tag vibe">the climb</span><span class="tag">Euljiro · 30 min</span><span class="tag wi">walk-in</span></div>
+        <p>You find a beat-up building, climb four pitch-dark flights past peeling walls half-sure you're trespassing, then push into a neon-bedazzled 5th-floor former technician's school packed with arty locals. There's a rooftop where smokers cluster on salvaged church pews. This is the founding temple of Seoul's whole hidden-bar movement; grab a highball and go up top.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Seendosi+신도시+Euljiro+Seoul">Map</a><a class="btn" href="https://www.instagram.com/seendosi/">IG</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="zoosindang" data-name="Zoo Sindang (zodiac speakeasy)" data-day="mon,tue" data-daytag="nights">
+        <div class="card-head"><h3><span class="rank">5</span>Zoo Sindang</h3><span class="price">~$18–25</span></div>
+        <div class="tags"><span class="tag vibe">zodiac speakeasy</span><span class="tag">Sindang · 25 min</span><span class="tag wi">walk-in (before 8)</span></div>
+        <p>Entered through what looks like a derelict shaman shrine, a nod to the neighborhood's history as a fortune-tellers' quarter, into a den of twelve zodiac cocktails built on traditional Korean liquors. Everyone orders their own animal's drink and compares. No reservations, get there before 8.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=주신당+서울">Map</a><a class="btn" href="https://www.instagram.com/zoosindang/">IG</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="lechamber" data-name="Le Chamber + Alice (crawl)" data-day="mon,tue" data-daytag="nights">
+        <div class="card-head"><h3><span class="rank">6</span>Le Chamber + Alice · the walkable crawl</h3><span class="price">~$15–25/drink</span></div>
+        <div class="tags"><span class="tag vibe">Asia's 50 Best</span><span class="tag">Cheongdam · walk from base</span><span class="tag">reserve</span></div>
+        <p>Two world-class hidden bars on the same Cheongdam street: at Le Chamber you find the right book and a bookshelf swings open; at Alice you walk through a working flower shop into an Alice-in-Wonderland den of theatrical, on-fire serves. Both do excellent zero-proof, so they carry the night even for a light drinker. Reserve both on CatchTable.</p>
+        <div class="links"><a class="btn book" href="https://www.catchtable.net/shop/lechamber">Le Chamber</a><a class="btn book" href="https://www.catchtable.net/shop/alice_cheongdam">Alice</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="neurin" data-name="Neurin Maeul (makgeolli brewery)" data-day="mon,tue" data-daytag="nights">
+        <div class="card-head"><h3><span class="rank">7</span>Neurin Maeul (Slow Brew Pub)</h3><span class="price">~$7 flight</span></div>
+        <div class="tags"><span class="tag vibe">makgeolli brewery</span><span class="tag">Gangnam · 10–15 min</span><span class="tag wi">walk-in</span></div>
+        <p>A 200-seat basement where makgeolli ferments on-site and pours at four "seasons" of ripeness, from light spring to sour, strong winter, served cloudy in brass bowls. The two-hour unlimited flight across all four stages, with a molten potato pancake, is the move. The most serious traditional-liquor house on your side of the river.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Neurin+Maeul+Brewery+Gangnam+Seoul">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="clubsound" data-name="Club Sound (dancefloor)" data-day="mon,tue" data-daytag="Mon–Wed only">
+        <div class="card-head"><h3><span class="rank">8</span>Club Sound</h3><span class="price">tables ~$1,000+</span></div>
+        <div class="tags"><span class="tag lock">Mon–Wed only</span><span class="tag">Gangnam · 5 min taxi</span><span class="tag">Kakao to book</span></div>
+        <p>The megaclubs (Octagon, Cakeshop) only run Thursday to Sunday, so on your nights this is the one genuinely live Gangnam floor, EDM on one side, hip-hop on the other. Closest big room to the hotel. Message the English concierge on KakaoTalk to set a table for five, and bring passports.</p>
+        <div class="links"><a class="btn book" href="https://open.kakao.com/o/ssAD95mf">Book (Kakao)</a><a class="btn" href="https://www.instagram.com/clubsound_official">IG</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="glam" data-name="Glam Lounge (Itaewon)" data-day="mon,tue" data-daytag="nights">
+        <div class="card-head"><h3><span class="rank">9</span>Glam Lounge</h3><span class="price">low cover</span></div>
+        <div class="tags"><span class="tag vibe">"Tue is the new Friday"</span><span class="tag">Itaewon · 15 min</span><span class="tag">table form</span></div>
+        <p>The Itaewon lounge-club with the best weekday energy in the city, an international 25-to-40 crowd, cocktails upstairs and a dancefloor down. Open every night, little to no cover midweek. Walk in, or use the form for a guaranteed table.</p>
+        <div class="links"><a class="btn book" href="https://www.districtglam.com/reservation">Table</a><a class="btn" href="https://www.instagram.com/glamseoul/">IG</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="kompakt" data-name="Kompakt Record Bar" data-day="mon,tue" data-daytag="nights">
+        <div class="card-head"><h3><span class="rank">10</span>Kompakt Record Bar</h3><span class="price">~$11–18</span></div>
+        <div class="tags"><span class="tag vibe">vinyl listening bar</span><span class="tag">Dosan · 10 min walk</span><span class="tag wi">walk-in</span></div>
+        <p>A vinyl-only listening bar with a serious vintage system, all warm low light and house records, ten minutes from your door. The lowest-key cool night on the list when you want to talk, not shout.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Kompakt+Record+Bar+Seoul">Map</a><a class="btn" href="https://kompakt.kr">Site</a><button class="add">+</button></div>
+      </div>
+    </div>
+    <button class="show-all" data-label="Show all 10 spots →">Show all 10 spots →</button>
+  </section>
+
+  <!-- ===================== DO ===================== -->
+  <section id="do">
+    <div class="sec-head"><span class="n">03</span><h2>Do</h2></div>
+    <p class="sec-sub">Ranked. The "wait, that exists?" column: become the 8th member of a game show, break into a hanok to stop a wedding, get scrubbed raw in an 8-floor bath palace.</p>
+    <p class="filter-note"></p>
+
+    <div class="card star" data-id="runningman" data-name="Running Man Experience" data-day="mon,tue,wed" data-daytag="">
+      <div class="card-head"><h3><span class="rank">1</span>Running Man Experience Center</h3><span class="price">~$12</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">live game show</span><span class="tag">Insadong · 25 min</span><span class="tag">book online</span></div>
+      <p>A real-life version of the hit Korean game show: your five become contestants racing through six-plus zones of physical missions, mazes, and puzzles against a 60–90 minute clock, scored and ranked at the end. It's goofy, competitive, and structured, the most fun a five-man group can have in one room here, and the cheapest big win on the whole menu.</p>
+      <div class="links"><a class="btn book" href="https://www.klook.com/en-US/activity/6488-running-man-thematic-experience-center-ticket-seoul/">Book</a><button class="add">+</button></div>
+    </div>
+
+    <div class="card star" data-id="keyescape" data-name="KEYESCAPE · Moonlight Love" data-day="mon,tue,wed" data-daytag="">
+      <div class="card-head"><h3><span class="rank">2</span>KEYESCAPE · "Moonlight Love"</h3><span class="price">~$15–20</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">cinematic escape room</span><span class="tag">Gangnam · 10–15 min</span><span class="tag">book ~1 wk out</span></div>
+      <p>Seoul is world-famous for set-design escape rooms, and this is the flagship: you sneak into a Supreme Chancellor's traditional hanok to stop an arranged marriage, in a set so detailed there's a no-shoes rule. It's KEYESCAPE's one English-playable room and a genuine brain-melter, not a walkthrough. Reserve ahead, it books up.</p>
+      <div class="links"><a class="btn book" href="https://keyescape.com">Book</a><button class="add">+</button></div>
+    </div>
+
+    <div class="card star" data-id="dragonhill" data-name="Dragon Hill Spa (jjimjilbang)" data-day="mon,tue,wed" data-daytag="">
+      <div class="card-head"><h3><span class="rank">3</span>Dragon Hill Spa (jjimjilbang)</h3><span class="price">~$10–12 +scrub</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">bath theme park</span><span class="tag">Yongsan · 20–25 min</span><span class="tag">Klook · 24h</span></div>
+      <p>An eight-floor bathhouse amusement park: open-air baths, jade and charcoal kiln rooms, matching pajamas, the rolled-towel "sheep head" hat, baked eggs and sweet rice drink, plus an arcade and a movie theater. The main event is the ajumma body scrub that sands you to a new human, do it together, it's the story. It's open 24h, so it's also the perfect last-morning reset before the flight.</p>
+      <div class="links"><a class="btn book" href="https://www.klook.com/en-US/activity/4185-admission-ticket-ticket-dragon-hill-spa-seoul/">Book</a><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Dragon+Hill+Spa+Seoul">Map</a><button class="add">+</button></div>
+    </div>
+
+    <div class="more">
+      <div class="card" data-id="luxurysu" data-name="Luxury Su Noraebang" data-day="mon,tue" data-daytag="evening">
+        <div class="card-head"><h3><span class="rank">4</span>Luxury Su Noraebang</h3><span class="price">~$8–17 room</span></div>
+        <div class="tags"><span class="tag vibe">karaoke palace</span><span class="tag">Hongdae · 25–30 min</span><span class="tag wi">walk-in</span></div>
+        <p>A glass-fronted, neon-glowing karaoke palace with velvet chairs, concert sound, and a huge current English catalog, and crucially it's alcohol-free: about a dollar a head gets unlimited popcorn, ice cream, and soft drinks. The energy comes from singing your lungs out, not from booze, which is exactly right for this crew. Tambourines mandatory.</p>
+        <div class="links"><a class="btn" href="http://sunoraebang.com/">Site</a><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=럭셔리수노래방+홍대">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="perfume" data-name="Perfume Bar by Excusez-Moi" data-day="mon,tue,wed" data-daytag="">
+        <div class="card-head"><h3><span class="rank">5</span>Perfume Bar by Excusez-Moi</h3><span class="price">~$62</span></div>
+        <div class="tags"><span class="tag vibe">hands-on / make-it</span><span class="tag">Garosu-gil · 5 min walk</span><span class="tag">book</span></div>
+        <p>A slick fragrance lab where you build a custom cologne from scratch off a wall of 30-plus single-note materials, mixing-board style, and walk out with a 30mL bottle of something only you made. The recipe is saved and reorderable, basically a spec sheet, which is the engineer hook. Five-minute walk from base, fits all five.</p>
+        <div class="links"><a class="btn book" href="https://www.seoultravelpass.com/en/products/435-seoul-gangnam-making-your-own-perfume-experience-excusezmoi">Book</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="wetwood" data-name="Wetwood · skateboard ring" data-day="mon,tue,wed" data-daytag="">
+        <div class="card-head"><h3><span class="rank">6</span>Wetwood · skateboard ring</h3><span class="price">~$35–46</span></div>
+        <div class="tags"><span class="tag vibe">build a trophy</span><span class="tag">Seongsu · 15–20 min</span><span class="tag">book</span></div>
+        <p>In a sawdust-and-tools studio you saw, shape, sand, and finish a wooden ring out of a salvaged skateboard deck, real tools, hands dirty. The "this ring used to be a skateboard" backstory is the payoff, and you leave with a keepable thing instead of a photo.</p>
+        <div class="links"><a class="btn book" href="https://www.klook.com/en-US/activity/74318-wooden-ring-making-workshop/">Book</a><button class="add">+</button></div>
+      </div>
+    </div>
+    <button class="show-all" data-label="Show all 6 spots →">Show all 6 spots →</button>
+  </section>
+
+  <!-- ===================== SHOP ===================== -->
+  <section id="shop">
+    <div class="sec-head"><span class="n">04</span><h2>Shop</h2></div>
+    <p class="sec-sub">Ranked. Cool concept stores, best of it a walk from the hotel, deeper cuts one cab away. Browsing is free, the spaces are half the point.</p>
+    <p class="filter-note"></p>
+
+    <div class="card star" data-id="ohkoos" data-name="Ohkoos (workwear)" data-day="mon,tue" data-daytag="daytime">
+      <div class="card-head"><h3><span class="rank">1</span>Ohkoos</h3><span class="price">$150–900</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">heritage workwear temple</span><span class="tag">Apgujeong · 3 min walk</span></div>
+      <p>A two-floor boutique three minutes from base stocking Nigel Cabourn, The Real McCoy's, Kapital, Viberg, and Tricker's: garment-dyed military cottons, repro fatigues, hand-welted boots. If anyone in the crew is an Our Legacy or heritage-denim guy, this is his church.</p>
+      <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Ohkoos+Apgujeong+Seoul">Map</a><a class="btn" href="https://www.instagram.com/ohkoos">IG</a><button class="add">+</button></div>
+    </div>
+
+    <div class="card star" data-id="document" data-name="Document (Seongsu)" data-day="mon,tue" data-daytag="daytime">
+      <div class="card-head"><h3><span class="rank">2</span>Document (Seongsu)</h3><span class="price">$120–650</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">slow-fashion shirting</span><span class="tag">Seongsu · 15 min taxi</span></div>
+      <p>A quiet standout for the understated, well-made end of the spectrum: founder Jongsoo Lee makes his own deconstructed French shirts, fatigue pants, and washed jackets, locally made and stocked at SSENSE internationally. An atmospheric, low-key flagship and the most quietly cool store on the list.</p>
+      <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Document+Seongsu+Seoul">Map</a><a class="btn" href="https://en.document-document.com">Site</a><button class="add">+</button></div>
+    </div>
+
+    <div class="card star" data-id="worksout" data-name="Worksout (Apgujeong)" data-day="mon,tue" data-daytag="daytime">
+      <div class="card-head"><h3><span class="rank">3</span>Worksout (Apgujeong flagship)</h3><span class="price">$60–500</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">streetwear cathedral</span><span class="tag">Apgujeong · 5 min walk</span></div>
+      <p>Three wood-and-steel floors behind a brushed-metal facade, stocking Carhartt WIP, Aries, Patta, BBC, New Balance, and emerging Korean labels, plus rotating pop-ups. The store a NYC streetwear guy walks into and instantly gets.</p>
+      <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=웍스아웃+압구정">Map</a><a class="btn" href="https://worksout.com/pages/worksout-apgujeong">Site</a><button class="add">+</button></div>
+    </div>
+
+    <div class="more">
+      <div class="card" data-id="pov" data-name="Point of View (Seongsu)" data-day="mon,tue" data-daytag="daytime">
+        <div class="card-head"><h3><span class="rank">4</span>Point of View (Seongsu)</h3><span class="price">$10–300</span></div>
+        <div class="tags"><span class="tag vibe">cabinet of curiosities</span><span class="tag">Seongsu · 15 min taxi</span></div>
+        <p>The most design-forward shop in Seoul, three themed floors of apothecary-meets-curiosity-cabinet with antique brass-and-glass vitrines full of premium pens, ink, sealing wax, and kinetic desk sculptures. You walk out with a brass object you didn't know you needed. The "one perfect thing" stop.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Point+of+View+Seongsu+Seoul">Map</a><a class="btn" href="https://www.pointofview.kr">Site</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="tomgreyhound" data-name="Tom Greyhound" data-day="mon,tue" data-daytag="daytime">
+        <div class="card-head"><h3><span class="rank">5</span>Tom Greyhound</h3><span class="price">$200–2,500</span></div>
+        <div class="tags"><span class="tag vibe">post-Colette select shop</span><span class="tag">Apgujeong · 8 min walk</span></div>
+        <p>A two-story building wrapped in shrubbery with a signature green door, the fashion-insider's curatorial stop, mixing Loewe, Jil Sander, Acne, and JW Anderson with emerging labels and its own line. Quieter and smarter than the hype shops.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=톰+그레이하운드+Seoul">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="manmade" data-name="Manmade Dosan (Wooyoungmi + Solid Homme)" data-day="mon,tue" data-daytag="daytime">
+        <div class="card-head"><h3><span class="rank">6</span>Manmade Dosan</h3><span class="price">$200–2,100</span></div>
+        <div class="tags"><span class="tag vibe">Wooyoungmi + Solid Homme</span><span class="tag">Sinsa · 10 min walk</span></div>
+        <p>One multi-floor building holding two of Korea's defining menswear lines, the Paris-runway Wooyoungmi upstairs and the cleaner, wearable Solid Homme below, with a cafe between them. The clean Korean tailoring that local stylists actually wear, all in one stop.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Manmade+Dosan+Seoul">Map</a><a class="btn" href="https://en.wooyoungmi.com">Site</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="juunj" data-name="Juun.J flagship" data-day="mon,tue" data-daytag="daytime">
+        <div class="card-head"><h3><span class="rank">7</span>Juun.J</h3><span class="price">$400–2,000</span></div>
+        <div class="tags"><span class="tag vibe">avant-garde menswear</span><span class="tag">Sinsa · 10 min walk</span></div>
+        <p>The flagship of Korea's most acclaimed avant-garde menswear designer, dipped entirely in black inside and out with an interior garden and a coffee shop: deconstructed, elongated tailoring with Rick Owens energy and Seoul precision. The closest destination-fashion store to your base.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Juun.J+flagship+Sinsa+Seoul">Map</a><a class="btn" href="https://www.juunj.com">Site</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="we11done" data-name="We11done + Rare Market" data-day="mon,tue" data-daytag="daytime">
+        <div class="card-head"><h3><span class="rank">8</span>We11done + Rare Market</h3><span class="price">$200–1,000</span></div>
+        <div class="tags"><span class="tag vibe">stylist-circle cool</span><span class="tag">Cheongdam · 8–12 min walk</span></div>
+        <p>Two stores from G-Dragon's sister and her stylist circle in the same Cheongdam cluster: We11done's luxe Y2K-into-future graphics and leather, and Rare Market's hard-to-find designer mix with real celebrity-stylist credibility. Gallery-clean spaces, genuinely cool, not a tourist stop.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=We11done+Cheongdam+Seoul">Map</a><a class="btn" href="https://www.we11-done.com">Site</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="niceweather" data-name="Nice Weather Market" data-day="mon,tue" data-daytag="daytime">
+        <div class="card-head"><h3><span class="rank">9</span>Nice Weather Market</h3><span class="price">$15–120</span></div>
+        <div class="tags"><span class="tag vibe">designer bodega</span><span class="tag">Garosu-gil · closest</span></div>
+        <p>A "convenience store as concept": a slick designer bodega mixing streetwear, camping gear, lifestyle goods, and its own apparel. Less heirloom, more a fun, well-designed haul the whole crew browses together. The easiest drop-in of the lot.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Nice+Weather+Market+Garosugil+Seoul">Map</a><a class="btn" href="https://en.niceweather.co.kr">Site</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="meclads" data-name="MECLADS (Hannam)" data-day="mon,tue" data-daytag="daytime">
+        <div class="card-head"><h3><span class="rank">10</span>MECLADS (Hannam)</h3><span class="price">$300–2,500</span></div>
+        <div class="tags"><span class="tag vibe">connoisseur menswear</span><span class="tag">Hannam · 12 min taxi</span></div>
+        <p>A "wabi-sabi / incomplete beauty" select shop carrying 40-plus forum-famous designers, Namacheko, Hed Mayner, Yohji, Guidi, Casey Casey, deeply edited and artisan-leaning. If one guy is a serious menswear head, this is the store he flew for.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=MECLADS+Hannam+Seoul">Map</a><a class="btn" href="https://www.instagram.com/meclads/">IG</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="hannamblock" data-name="MMMG + Post Poetics + TW Records" data-day="mon,tue" data-daytag="TW Records closed Mon">
+        <div class="card-head"><h3><span class="rank">11</span>MMMG + Post Poetics + TW Records</h3><span class="price">$5–180</span></div>
+        <div class="tags"><span class="tag vibe">objects, art books, vinyl</span><span class="tag">Hannam · one cab</span><span class="tag day">records closed Mon</span></div>
+        <p>Three doors of one perfect Hannam block: MMMG's iconic muted stationery and FREITAG, Post Poetics for heavyweight imported art and photo books, and TW Records for curated soul, funk, and Korean pressings. The single highest-taste hour for a design-leaning crew. The record shop is the one piece closed Mondays.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=MMMG+Hannam+Seoul">Map</a><a class="btn" href="https://mmmg.net">Site</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="paf" data-name="Post Archive Faction / PAF" data-day="mon,tue" data-daytag="daytime">
+        <div class="card-head"><h3><span class="rank">12</span>Post Archive Faction / PAF (Sindang)</h3><span class="price">$150–1,800</span></div>
+        <div class="tags"><span class="tag vibe">IYKYK techwear</span><span class="tag">Sindang · 15–20 min taxi</span></div>
+        <p>The most internationally decorated label here, an LVMH Prize finalist making radical asymmetric techwear with a left/right/center garment system. The flagship sits inside the old sewing factory where the clothes are made, raw concrete and museum-quiet, routinely called the best store experience of a Seoul trip.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Post+Archive+Faction+Sindang+Seoul">Map</a><a class="btn" href="https://postarchivefaction.com">Site</a><button class="add">+</button></div>
+      </div>
+    </div>
+    <button class="show-all" data-label="Show all 12 stores →">Show all 12 stores →</button>
+  </section>
+
+  <!-- ===================== WANDER ===================== -->
+  <section id="wander">
+    <div class="sec-head"><span class="n">05</span><h2>Wander</h2></div>
+    <p class="sec-sub">Ranked. Where to get pulled into something real: old men who'll wave you over for makgeolli, an "old-man Harajuku" flea market, a maker-maze of welders and hidden bars.</p>
+    <p class="filter-note"></p>
+
+    <div class="card star" data-id="jongnowander" data-name="Jongno / Donui-dong makgeolli alley" data-day="mon,tue,wed" data-daytag="">
+      <div class="card-head"><h3><span class="rank">1</span>Jongno / Tapgol / Donui-dong makgeolli alley</h3><span class="price">free–$6</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">pulled into it</span><span class="tag">Jongno · 18 min, Line 3</span><span class="tag wi">walk-in</span></div>
+      <p>The single best place in Seoul to be absorbed into something real, because it was built for old Seoul, not for you: start at Tapgol Park past elderly men in worn fedoras, 5,000-won sidewalk barbers and 1,000-won coffee carts, then thread into the Donui-dong makgeolli alleys, low doorways, charcoal-mackerel smoke, cloudy rice wine in dented kettles, and old men who will absolutely wave you over. That alley is your highest-odds "pulled in" moment of the trip.</p>
+      <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Tapgol+Park+Seoul">Map</a><button class="add">+</button></div>
+    </div>
+
+    <div class="card star" data-id="dongmyo" data-name="Dongmyo Flea Market" data-day="mon,tue,wed" data-daytag="">
+      <div class="card-head"><h3><span class="rank">2</span>Dongmyo Flea Market</h3><span class="price">free–$4</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">"old-man Harajuku"</span><span class="tag day">best on weekends</span><span class="tag">Jongno · 25 min taxi</span></div>
+      <p>The ground vanishes under mountains of clothes dumped on tarps, old men in bucket hats crouched elbow-deep hunting a 1,000-won treasure, the air thick with dusty wool, fried duck eggs, and cassette tapes. Dig the piles for vintage, grab a boiled duck egg while you sort. Open daily, best on weekend afternoons when fresh stock lands. Pure, unbothered, local Seoul.</p>
+      <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Dongmyo+Flea+Market+Seoul">Map</a><button class="add">+</button></div>
+    </div>
+
+    <div class="card star" data-id="seochon" data-name="Seochon" data-day="mon,tue,wed" data-daytag="">
+      <div class="card-head"><h3><span class="rank">3</span>Seochon</h3><span class="price">free</span></div>
+      <div class="dm">★ Top three</div>
+      <div class="tags"><span class="tag vibe">"Bukchon but real"</span><span class="tag day">Tongin café closed Mon</span><span class="tag">Gyeongbokgung · 20 min, Line 3</span></div>
+      <p>Narrow stone lanes and low hanok rooflines where people actually live, a grandmother's kalguksu shop beside a hundred-year-old house, no tour buses. The city's own tourism office literally says turn off Google Maps and follow your feet. Start at Tongin Market for the brass-token DIY lunchbox (the lunchbox café is closed Mondays), then drift toward the Suseong-dong valley.</p>
+      <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Tongin+Market+Seoul">Map</a><button class="add">+</button></div>
+    </div>
+
+    <div class="more">
+      <div class="card" data-id="euljiro" data-name="Euljiro / Seun Sangga" data-day="mon,tue,wed" data-daytag="">
+        <div class="card-head"><h3><span class="rank">4</span>Euljiro / Seun Sangga</h3><span class="price">free</span></div>
+        <div class="tags"><span class="tag vibe">maker-maze by day</span><span class="tag">Euljiro · 22 min, Line 3</span><span class="tag wi">walk-in</span></div>
+        <p>By day the alleys are working metal, tool shops, lighting wholesalers, welders throwing sparks; by night the same grimy doorways hide the speakeasies where finding them is the whole adventure. Start at Sewoon Plaza, a 1968 modernist maker arcade with a rooftop garden, and thread the lanes toward a hidden bar at dusk. Ties straight into the Drink list.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Sewoon+Plaza+Seoul">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="seongsu" data-name="Seongsu-dong" data-day="mon,tue,wed" data-daytag="">
+        <div class="card-head"><h3><span class="rank">5</span>Seongsu-dong</h3><span class="price">free+</span></div>
+        <div class="tags"><span class="tag vibe">Brooklyn of Seoul</span><span class="tag">Seongdong-gu · 10–15 min taxi</span><span class="tag wi">walk-in</span></div>
+        <p>Old shoe factories turned into specialty roasters, concept stores, and Seoul's busiest rotating popup scene, real industrial bones with constant novelty. Pair it with the Document and Point of View stops from the Shop list, then the deer garden and bikes-and-river at Seoul Forest next door. The most "young creative Seoul" half-day.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Seongsu-dong+Seoul">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="folkflea" data-name="Seoul Folk Flea Market" data-day="mon,wed" data-daytag="Mon or Wed (not Tue)">
+        <div class="card-head"><h3><span class="rank">6</span>Seoul Folk Flea Market</h3><span class="price">free</span></div>
+        <div class="tags"><span class="tag lock">Closed Tue</span><span class="tag">Sinseol-dong · 30 min</span><span class="tag wi">walk-in</span></div>
+        <p>Korea's largest flea market, indoors over two color-coded floors of old toys, brass kettles, military medals, and vinyl, all old-paper-and-machine-oil smell with live percussion clattering through. The all-weather companion to Dongmyo, one stop away. Closed Tuesdays, so make it a Monday pairing with Dongmyo.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Seoul+Folk+Flea+Market">Map</a><button class="add">+</button></div>
+      </div>
+
+      <div class="card" data-id="inwangsan" data-name="Inwangsan wall hike" data-day="mon,tue,wed" data-daytag="">
+        <div class="card-head"><h3><span class="rank">7</span>Inwangsan wall hike</h3><span class="price">free</span></div>
+        <div class="tags"><span class="tag vibe">athletic morning</span><span class="tag">NW Seoul · 30 min</span><span class="tag wi">walk-in</span></div>
+        <p>For the gym guys: a one-to-two-hour climb along the ancient Seoul city wall with 360-degree views over the whole city and a fraction of Bukhansan's crowds, and you're back by lunch. The right amount of earned, the right amount of quick. A strong last-morning option too.</p>
+        <div class="links"><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Inwangsan+Seoul">Map</a><button class="add">+</button></div>
+      </div>
+    </div>
+    <button class="show-all" data-label="Show all 7 spots →">Show all 7 spots →</button>
+  </section>
+
+  <!-- ===================== TIPS ===================== -->
+  <section id="tips">
+    <div class="sec-head"><span class="n">06</span><h2>Local Tips</h2></div>
+    <p class="sec-sub">The handful of things that make Seoul easy. Read once, then move like you live here.</p>
+    <div class="card"><p style="margin:0"><b>Maps:</b> use Naver Map (or KakaoMap). Google driving navigation simply doesn't work in Korea. Search in English, it mostly resolves.</p></div>
+    <div class="card"><p style="margin:0"><b>Taxis:</b> grab the KakaoT app, the local Uber, cheap and everywhere. Most of this menu is a $4–6 ride from the hotel.</p></div>
+    <div class="card"><p style="margin:0"><b>Subway:</b> Line 3 runs straight from Apgujeong to nearly every old-Seoul spot here, no transfer. Buy a T-money card at any convenience store and tap on and off.</p></div>
+    <div class="card"><p style="margin:0"><b>Cash:</b> needed for the tents, flea markets, and the nogari alley. Cards work everywhere else.</p></div>
+    <div class="card"><p style="margin:0"><b>Don't tip.</b> Anywhere. Korea doesn't do it and it reads as odd. The price is the price.</p></div>
+    <div class="card"><p style="margin:0"><b>Translation:</b> download Papago, it beats Google Translate for Korean and has a camera mode that reads menus and signs live.</p></div>
+    <div class="card"><p style="margin:0"><b>Reservations:</b> the top restaurants and bars run on the CatchTable app (English, foreign cards). The Reserve buttons land on each spot's date screen. For a 5-top this close in, turn on the in-app waitlist, drops hit 1–2 days out. Mingles needs a deposit and Evett needs an email for five.</p></div>
+    <div class="card"><p style="margin:0"><b>Jjimjilbang rules:</b> shower fully nude before the baths, no phones in the bath area, then put on the matching pajamas for the co-ed floors. Yes, do the body scrub.</p></div>
+    <div class="card"><p style="margin:0"><b>Clubs:</b> carry passports, and pre-book a table so the door is a non-issue for a group of five.</p></div>
+    <div class="card"><p style="margin:0"><b>Convenience stores</b> (CU, GS25, 7-Eleven) are 24h and everywhere: the riverside cup-ramyeon move, cheap hangover drinks, T-money top-ups, umbrellas when the rain hits.</p></div>
+  </section>
+
+</main>
+
+<footer>
+  Built for the crew · Seoul Jun 15–17, 2026 · Your plan saves to this phone · Ho Chi Minh next.
+</footer>
+
+<script>
+  const KEY='seoulPlan_v2';
+  const DAYS=[['mon','Mon · Jun 15'],['tue','Tue · Jun 16'],['wed','Wed AM · Jun 17'],['none','Unscheduled']];
+  const DAYSHORT={mon:'Mon',tue:'Tue',wed:'Wed AM',none:'Unscheduled'};
+  const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const enc=o=>btoa(encodeURIComponent(JSON.stringify(o)));
+  const dec=s=>JSON.parse(decodeURIComponent(atob(s)));
+  function loadLS(){try{return JSON.parse(localStorage.getItem(KEY))||{items:{},events:[]}}catch(e){return{items:{},events:[]}}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+  let state=loadLS();
+  if(location.hash.indexOf('#p=')===0){try{const sh=dec(location.hash.slice(3));if(sh&&sh.items){state=sh;save();}}catch(e){}}
+
+  function mark(btn,on){btn.classList.toggle('on',on);btn.textContent=on?'✓':'+';btn.setAttribute('aria-label',on?'Added to plan':'Add to plan');}
+  document.querySelectorAll('.card').forEach(card=>{
+    const id=card.dataset.id; if(!id) return;
+    const btn=card.querySelector('.add'); if(!btn) return;
+    mark(btn,!!state.items[id]);
+    btn.addEventListener('click',()=>{
+      if(state.items[id]){delete state.items[id];mark(btn,false);}
+      else{state.items[id]={day:'none',time:'',name:card.dataset.name||id,daytag:card.dataset.daytag||'',days:card.dataset.day||'mon,tue,wed'};mark(btn,true);}
+      save();renderPlan();count();
+    });
+  });
+
+  document.querySelectorAll('.show-all').forEach(b=>{b.addEventListener('click',()=>{const open=b.closest('section').classList.toggle('open');b.textContent=open?'Show less':b.dataset.label;});});
+
+  let filter='all';
+  document.querySelectorAll('.dayfilter button').forEach(b=>{b.addEventListener('click',()=>{filter=b.dataset.day;document.querySelectorAll('.dayfilter button').forEach(x=>x.classList.toggle('active',x===b));applyFilter();});});
+  function applyFilter(){
+    document.body.classList.toggle('filtering',filter!=='all');
+    document.querySelectorAll('.card[data-day]').forEach(card=>{card.classList.toggle('hide',!(filter==='all'||card.dataset.day.split(',').includes(filter)));});
+    document.querySelectorAll('.filter-note').forEach(n=>{n.textContent=filter==='all'?'':'Showing what works '+(filter==='wed'?'Wed morning':'on '+DAYSHORT[filter])+'.';});
+  }
+
+  const own=document.getElementById('ownToggle'), form=document.getElementById('evform');
+  own.addEventListener('click',()=>{form.hidden=!form.hidden;own.textContent=form.hidden?'+ Add your own plan':'Close';});
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const t=document.getElementById('ev-title').value.trim(); if(!t)return;
+    state.events.push({id:'ev'+Date.now(),title:t,day:document.getElementById('ev-day').value,time:document.getElementById('ev-time').value,note:document.getElementById('ev-note').value.trim()});
+    form.reset();form.hidden=true;own.textContent='+ Add your own plan';save();renderPlan();count();
+  });
+
+  document.getElementById('shareBtn').addEventListener('click',()=>{
+    if(!(Object.keys(state.items).length+state.events.length)){alert('Add a few things first, then share.');return;}
+    const text=planText();
+    const hosted=location.protocol.indexOf('http')===0;
+    const url=hosted?location.origin+location.pathname+'#p='+enc(state):'';
+    const payload={title:'Seoul plan',text:text}; if(url)payload.url=url;
+    if(navigator.share){navigator.share(payload).catch(()=>{});}
+    else{copy(text+(url?'\n\n'+url:''));}
+  });
+  function copy(t){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>alert('Itinerary copied. Paste it in the group chat.'),()=>prompt('Copy your itinerary:',t));}else{prompt('Copy your itinerary:',t);}}
+  function planText(){
+    const all=[...Object.entries(state.items).map(([id,it])=>({kind:'item',...it})),...state.events.map(e=>({kind:'event',...e}))];
+    const out=['Seoul — the plan'];
+    DAYS.forEach(([d,label])=>{
+      const rows=all.filter(e=>(e.day||'none')===d); if(!rows.length)return;
+      rows.sort((a,b)=>(a.time||'~~').localeCompare(b.time||'~~'));
+      out.push('',label.toUpperCase());
+      rows.forEach(e=>out.push((e.time?e.time+'  ':'')+(e.kind==='event'?e.title:e.name)));
+    });
+    return out.join('\n');
+  }
+
+  function renderPlan(){
+    const wrap=document.getElementById('planlist');
+    const all=[];
+    Object.entries(state.items).forEach(([id,it])=>all.push({kind:'item',id,...it}));
+    state.events.forEach(ev=>all.push({kind:'event',...ev}));
+    if(!all.length){wrap.innerHTML='<div class="empty">Tap <b>+</b> on anything to start building your days.</div>';return;}
+    let html='';
+    DAYS.forEach(([d,label])=>{
+      const rows=all.filter(e=>(e.day||'none')===d); if(!rows.length)return;
+      rows.sort((a,b)=>(a.time||'~~').localeCompare(b.time||'~~'));
+      html+='<div class="dayh">'+label+'</div>';
+      rows.forEach(e=>{
+        const name=esc(e.kind==='event'?e.title:e.name);
+        const tag=e.kind==='item'&&e.daytag?'<span class="ig">'+esc(e.daytag)+'</span>':'';
+        const warn=(e.kind==='item'&&e.days&&e.day!=='none'&&!e.days.split(',').includes(e.day))?'<span class="warn">only '+(esc(e.daytag)||'select days')+'</span>':'';
+        const note=e.kind==='event'&&e.note?'<div class="evnote">'+esc(e.note)+'</div>':'';
+        let opts='';DAYS.forEach(([dd])=>{opts+='<option value="'+dd+'"'+((e.day||'none')===dd?' selected':'')+'>'+DAYSHORT[dd]+'</option>';});
+        html+='<div class="pentry"><div><span class="pe-name">'+name+'</span>'+tag+warn+note+'</div><div class="pe-ctl"><input type="time" class="pe-time" value="'+(e.time||'')+'" data-k="'+e.kind+'" data-id="'+e.id+'"><select class="pe-day" data-k="'+e.kind+'" data-id="'+e.id+'">'+opts+'</select><button class="pe-rm" data-k="'+e.kind+'" data-id="'+e.id+'">Remove</button></div></div>';
+      });
+    });
+    wrap.innerHTML=html;
+    wrap.querySelectorAll('.pe-time').forEach(el=>el.addEventListener('change',()=>setF(el,'time',el.value)));
+    wrap.querySelectorAll('.pe-day').forEach(el=>el.addEventListener('change',()=>setF(el,'day',el.value)));
+    wrap.querySelectorAll('.pe-rm').forEach(el=>el.addEventListener('click',()=>rmEntry(el)));
+  }
+  function setF(el,k,v){const id=el.dataset.id;if(el.dataset.k==='item'){if(state.items[id])state.items[id][k]=v;}else{const ev=state.events.find(x=>x.id===id);if(ev)ev[k]=v;}save();renderPlan();}
+  function rmEntry(el){const id=el.dataset.id;if(el.dataset.k==='item'){delete state.items[id];}else{state.events=state.events.filter(x=>x.id!==id);}save();renderPlan();count();sync();}
+  function sync(){document.querySelectorAll('.card').forEach(card=>{const id=card.dataset.id;const b=card.querySelector('.add');if(id&&b)mark(b,!!state.items[id]);});}
+  function count(){const n=Object.keys(state.items).length+state.events.length;document.getElementById('plancount').textContent=n?' ('+n+')':'';}
+
+  renderPlan();count();
+</script>
+</body>
+</html>
