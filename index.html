@@ -96,6 +96,18 @@
   .evform .evrow select,.evform .evrow input{flex:1;min-width:0}
   .evform button{flex:0 0 auto;background:var(--accent);border:1px solid var(--accent);color:#fff;font-weight:800;
     border-radius:9px;padding:10px 20px;font-family:inherit;font-size:14px;cursor:pointer}
+  .plansmart{background:linear-gradient(180deg,rgba(232,196,121,.08),var(--card));border:1px solid rgba(232,196,121,.42);border-radius:15px;padding:0;margin:16px 0 4px;overflow:hidden}
+  .plansmart>summary{list-style:none;cursor:pointer;padding:15px 16px;font-size:16px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+  .plansmart>summary::-webkit-details-marker{display:none}
+  .plansmart>summary::after{content:"▾";margin-left:auto;color:var(--gold);font-size:13px;transition:.2s}
+  .plansmart[open]>summary::after{transform:rotate(180deg)}
+  .plansmart .ps-body{padding:0 16px 15px}
+  .plansmart .ps-intro{font-size:13px;color:var(--mut);margin:0 0 14px}
+  .plansmart .ph{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);font-weight:800;margin:13px 0 7px}
+  .plansmart ul{list-style:none;margin:0;padding:0}
+  .plansmart li{position:relative;padding:5px 0 5px 16px;font-size:13.5px;color:var(--soft)}
+  .plansmart li:before{content:"";position:absolute;left:1px;top:13px;width:5px;height:5px;border-radius:50%;background:var(--gold)}
+  .plansmart li b{color:var(--txt)}
   .empty{color:var(--mut);font-size:13.5px;background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:20px;text-align:center}
   .empty b{color:var(--soft)}
   .dayh{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:800;
@@ -543,6 +555,34 @@
   <!-- ===================== SAIGON / HCMC ================================== -->
   <!-- ===================================================================== -->
   <div class="city hide" id="city-hcmc">
+
+  <details class="plansmart" open>
+    <summary>Play it smart · a week in Saigon</summary>
+    <div class="ps-body">
+      <p class="ps-intro">It's a menu, not a schedule. But a few things reward planning, sequence these and the week opens up. Tap <b>+</b> on any card to drop it into your Plan.</p>
+
+      <div class="ph">Start the clock day one</div>
+      <ul>
+        <li><b>Want a suit (or custom shoes) made?</b> Decide and get measured the day you land. Made-to-measure needs a mid-week fitting and an end-of-week pickup, so it only works if you start early.</li>
+        <li><b>Anan Saigon:</b> email about two weeks out, and the whole table orders the same tasting menu, so agree on it as a group first.</li>
+        <li><b>Night motorbike food tour:</b> sells out for groups of five, book it roughly a week ahead.</li>
+      </ul>
+
+      <div class="ph">Build the week around these</div>
+      <ul>
+        <li><b>The big tasting menus</b> (Akuna and friends) often close Sunday and Monday, slot your fine-dining night midweek.</li>
+        <li><b>Cu Chi tunnels</b> is a half-day morning trip, go to the Ben Duoc entrance on a weekday for far fewer buses.</li>
+        <li><b>The Mekong</b> is worth an overnight in Can Tho, not a day trip, the Cai Rang floating market peaks 5:30–7:30am and you have to sleep there to catch it.</li>
+      </ul>
+
+      <div class="ph">Catch these at the right hour</div>
+      <ul>
+        <li><b>Dawn:</b> the Tao Dan birdmen (~6:30am), the Bo Ne sizzling breakfast (5–11am), the floating market.</li>
+        <li><b>Dusk:</b> ca phe bet on the Palace lawns, Turtle Lake, the rooftops.</li>
+        <li><b>After 7pm:</b> the Vinh Khanh snail street and the Ho Thi Ky food alley come alive.</li>
+      </ul>
+    </div>
+  </details>
 
   <!-- EAT -->
   <section data-sec="eat">
