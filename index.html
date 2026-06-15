@@ -11,7 +11,7 @@
 <style>
   :root{
     --bg:#0d0b09; --card:#15110d; --card2:#1c1711; --line:rgba(233,226,214,.13); --line2:rgba(233,226,214,.07);
-    --txt:#ece6da; --soft:#c9c1b2; --mut:#928a7b; --brass:#c2a36c; --brassdim:#9a7f53; --oxblood:#b0584a;
+    --txt:#ece6da; --soft:#c9c1b2; --mut:#a89e8c; --brass:#c2a36c; --brassdim:#9a7f53; --oxblood:#b0584a;
     --serif:'Fraunces',Georgia,serif; --read:'Newsreader',Georgia,serif;
     --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
   }
@@ -28,7 +28,9 @@
   .citysw{display:flex;gap:10px}
   .citysw button{flex:1;background:transparent;border:1px solid var(--line);color:var(--mut);
     border-radius:3px;padding:11px 13px;font-family:inherit;cursor:pointer;text-align:left;transition:.18s}
-  .citysw button.active{border-color:var(--brass)}
+  .citysw button.active{border-color:var(--brass);background:linear-gradient(180deg,rgba(194,163,108,.16),rgba(194,163,108,.03))}
+  .orient{font-family:var(--mono);font-size:10.5px;line-height:1.6;letter-spacing:.02em;color:var(--mut);margin:13px 2px 0}
+  .orient b{color:var(--brass);font-weight:500}
   .citysw .cn{display:block;font-family:var(--serif);font-size:18px;font-weight:600;letter-spacing:-.01em;color:var(--soft)}
   .citysw button.active .cn{color:var(--brass)}
   .citysw .cd{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-top:4px}
@@ -74,8 +76,8 @@
   .tag:not(:first-child):not(.lock):not(.day)::before{content:"";position:absolute;left:-7px;top:50%;width:2px;height:2px;border-radius:50%;background:var(--mut);transform:translateY(-50%)}
   .tag.vibe{color:var(--brass)}
   .tag.wi{color:var(--soft)}
-  .tag.lock{color:#f4d9d2;background:rgba(176,88,74,.22);border:1px solid rgba(176,88,74,.5);padding:3px 8px;border-radius:2px;text-transform:uppercase}
-  .tag.day{color:var(--brass);border:1px solid rgba(194,163,108,.32);padding:3px 8px;border-radius:2px}
+  .tag.lock{font-size:11px;letter-spacing:.05em;color:#f6dcd5;background:rgba(176,88,74,.28);border:1px solid rgba(176,88,74,.6);padding:3px 8px;border-radius:2px;text-transform:uppercase}
+  .tag.day{font-size:11px;letter-spacing:.05em;color:var(--brass);background:rgba(194,163,108,.1);border:1px solid rgba(194,163,108,.4);padding:3px 8px;border-radius:2px}
   .card p{margin:12px 0 13px;font-size:15px;line-height:1.55;color:var(--soft)}
   .links{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   .btn{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:2px;border:1px solid var(--line);color:var(--soft);background:transparent}
@@ -87,8 +89,8 @@
   .add.on{background:var(--brass);color:#1a1408}
   .sharebtn{margin-left:auto;background:transparent;border:1px solid var(--brass);color:var(--brass);
     font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:8px 16px;border-radius:2px;cursor:pointer;align-self:center}
-  .show-all{display:block;width:100%;margin:4px 0 12px;background:transparent;border:1px solid var(--line);
-    color:var(--mut);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:12px;border-radius:3px;cursor:pointer}
+  .show-all{display:block;width:100%;margin:4px 0 12px;background:transparent;border:1px solid rgba(194,163,108,.4);
+    color:var(--brass);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:12px;border-radius:3px;cursor:pointer}
   body.filtering .show-all{display:none}
 
   .empty{color:var(--mut);font-size:14px;background:var(--card);border:1px dashed var(--line);border-radius:4px;padding:22px;text-align:center}
@@ -124,6 +126,7 @@
     <button data-city="seoul" class="active"><span class="cn">Seoul</span><span class="cd">Mon Jun 15 &rarr; Wed AM</span></button>
     <button data-city="hcmc"><span class="cn">Saigon</span><span class="cd">from Wed &middot; 7&ndash;9 days</span></button>
   </div>
+  <p class="orient">Two cities, tap to switch. Hit <b>+</b> to save any spot, then open <b>Plan</b> &rarr; <b>Share</b> to drop your list in the group chat. Saves on this phone only.</p>
 </header>
 
 <div class="bars">
@@ -197,7 +200,7 @@
       </div>
       <div class="card" data-id="s-jungsik" data-name="Jungsik (2-star)" data-city="seoul" data-day="mon,tue" data-daytag="dinner, Mon/Tue">
         <div class="card-head"><h3><span class="rank">5</span>Jungsik</h3><span class="price">~$240</span></div>
-        <div class="tags"><span class="tag day">Any night &middot; 2-star</span><span class="tag">Cheongdam &middot; 6 min taxi</span><span class="tag">reserve</span></div>
+        <div class="tags"><span class="tag day">Any night &middot; 2-star</span><span class="tag">Gangnam &middot; 6 min taxi</span><span class="tag">reserve</span></div>
         <p>Modern Korean from the same house as the 3-star in NYC, the least stuffy of the fine-dining tier and the only top spot open both your nights. The gimbap course and the hanwoo galbi are the signatures. The big meal without the ceremony.</p>
         <div class="links"><a class="btn book" href="https://www.catchtable.net/shop/jungsik">Reserve</a><a class="btn map" href="https://www.google.com/maps/search/?api=1&query=Jungsik+Seoul">Map</a><button class="add">+</button></div>
       </div>
@@ -525,7 +528,7 @@
     <p class="sec-sub">The handful of things that make Seoul easy. Read once, then move like you live here.</p>
     <div class="card"><p style="margin:0"><b>Maps:</b> use Naver Map (or KakaoMap). Google driving navigation doesn't work in Korea. Search in English, it mostly resolves.</p></div>
     <div class="card"><p style="margin:0"><b>Taxis:</b> grab the KakaoT app, the local Uber, cheap and everywhere. Most of this menu is a $4&ndash;6 ride from the hotel.</p></div>
-    <div class="card"><p style="margin:0"><b>Subway:</b> Line 3 runs straight from Apgujeong to nearly every old-Seoul spot here, no transfer. Buy a T-money card at any convenience store and tap on and off.</p></div>
+    <div class="card"><p style="margin:0"><b>Subway:</b> Apgujeong is on Line 3, which reaches the Jongno-area spots, but budget a transfer for Euljiro, Sindang, and Dongmyo (or just grab a KakaoT taxi, $4&ndash;6). Buy a T-money card at any convenience store and tap on and off.</p></div>
     <div class="card"><p style="margin:0"><b>Cash:</b> needed for the tents, flea markets, and the nogari alley. Cards work everywhere else.</p></div>
     <div class="card"><p style="margin:0"><b>Don't tip.</b> Anywhere. Korea doesn't do it and it reads as odd. The price is the price.</p></div>
     <div class="card"><p style="margin:0"><b>Translation:</b> download Papago, it beats Google Translate for Korean and has a camera mode that reads menus live.</p></div>
@@ -991,13 +994,20 @@
     });
   });
 
-  document.querySelectorAll('nav button').forEach(b=>{
+  const navBtns=document.querySelectorAll('nav button');
+  function setNav(sec){navBtns.forEach(x=>x.classList.toggle('on',x.dataset.sec===sec));}
+  navBtns.forEach(b=>{
     b.addEventListener('click',()=>{
       const sec=b.dataset.sec;
+      setNav(sec);
       let el = sec==='plan' ? document.getElementById('plan') : document.querySelector('#city-'+activeCity+' [data-sec="'+sec+'"]');
       if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
     });
   });
+  try{
+    const spy=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const s=e.target.id==='plan'?'plan':e.target.dataset.sec;if(s)setNav(s);}});},{rootMargin:'-112px 0px -72% 0px'});
+    document.querySelectorAll('#plan, section[data-sec]').forEach(s=>spy.observe(s));
+  }catch(e){}
 
   function mark(btn,on){btn.classList.toggle('on',on);btn.textContent=on?'✓':'+';btn.setAttribute('aria-label',on?'Added':'Add to plan');}
   document.querySelectorAll('.card').forEach(card=>{
@@ -1042,7 +1052,7 @@
   function renderPlan(){
     const wrap=document.getElementById('planlist');
     const all=Object.entries(state.items).map(([id,it])=>({id,...it}));
-    if(!all.length){wrap.innerHTML='<div class="empty">Tap <b>+</b> on the spots you like to build a shortlist, then Share it.</div>';return;}
+    if(!all.length){wrap.innerHTML='<div class="empty">Tap <b>+</b> on the spots you like to build a shortlist, then Share it. <span style="opacity:.65">Saved on this phone only.</span></div>';return;}
     let html='';
     ['seoul','hcmc'].forEach(c=>{
       const rows=all.filter(e=>(e.city||'seoul')===c); if(!rows.length)return;
